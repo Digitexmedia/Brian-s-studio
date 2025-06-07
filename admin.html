@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard – Brian's Studio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1528105242451-1e9c3b2261c6') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+    }
+    header {
+      background-color: rgba(75, 0, 130, 0.9);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    nav {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.1);
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    nav a:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    .container {
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .controls {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .controls input {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      flex: 1;
+    }
+    .controls button {
+      padding: 10px 20px;
+      background-color: #4b0082;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .controls button:hover {
+      background-color: #360061;
+    }
+    .order {
+      background: rgba(255, 255, 255, 0.9);
+      border-left: 5px solid #4b0082;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .order h3 {
+      margin-top: 0;
+      color: #4b0082;
+    }
+    .order p {
+      margin: 5px 0;
+    }
+    .status {
+      font-weight: bold;
+      color: green;
+    }
+    .status-select {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>Brian's Studio – Admin Dashboard</header>
+
+  <nav>
+    <a href="shop.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/shop.png" alt="Shop"/>Shop</a>
+    <a href="about.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/info.png" alt="About"/>About</a>
+    <a href="gallery.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/picture.png" alt="Gallery"/>Gallery</a>
+    <a href="contact.html"><img class="icon" src="https://img.icons8.com/ios-filled/50/phone.png" alt="Contact"/>Contact</a>
+  </nav>
+
+  <div class="container">
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search by number or location...">
+      <button onclick="filterOrders()">Search</button>
+    </div>
+
+    <div id="ordersContainer">
+      <p>Loading orders...</p>
+    </div>
+  </div>
+
+  <script>
+    let allOrders = [];
+
+    async function fetchOrders() {
+      try {
+        const response = await fetch('http://localhost:3000/admin/orders');
+        allOrders = await response.json();
+        displayOrders(allOrders);
+      } catch (err) {
+        console.error('Error loading orders:', err);
+        document.getElementById('ordersContainer').innerHTML = '<p>Error loading orders.</p>';
+      }
+    }
+
+    function displayOrders(orders) {
+      const container = document.getElementById('ordersContainer');
+      container.innerHTML = '';
+
+      if (orders.length === 0) {
+        container.innerHTML = '<p>No orders available yet.</p>';
+        return;
+      }
+
+      orders.forEach((order, index) => {
+        const div = document.createElement('div');
+        div.className = 'order';
+        div.innerHTML = `
+          <h3>Order from: ${order.mpesaNumber}</h3>
+          <p><strong>Pickup Location:</strong> ${order.pickupLocation}</p>
+          <p><strong>Total Paid:</strong> KES ${order.total}</p>
+          <p><strong>Pickup Code:</strong> ${order.pickupCode}</p>
+          <p><strong>Status:</strong> <span class="status">${order.status || 'PAID'}</span></p>
+          <ul>
+            ${order.cart.map(item => <li>${item.name} – KES ${item.price}</li>).join('')}
+          </ul>
+          <label>Update Status:</label>
+          <select class="status-select" onchange="updateStatus(${index}, this.value)">
+            <option value="PAID" ${order.status === 'PAID' ? 'selected' : ''}>PAID</option>
+            <option value="PACKED" ${order.status === 'PACKED' ? 'selected' : ''}>PACKED</option>
+            <option value="PICKED UP" ${order.status === 'PICKED UP' ? 'selected' : ''}>PICKED UP</option>
+          </select>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function filterOrders() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allOrders.filter(order =>
+        order.mpesaNumber.toLowerCase().includes(query) ||
+        order.pickupLocation.toLowerCase().includes(query)
+      );
+      displayOrders(filtered);
+    }
+
+    function updateStatus(index, newStatus) {
+      allOrders[index].status = newStatus;
+      displayOrders(allOrders);
+      // You can add a fetch POST here to update status in the database.
+    }
+    // === server.js ===
+const express = require('express');
+const fs = require('fs');
+const cors = require('cors');
+const app = express();
+const PORT = 3000;
+
+app.use(cors());
+app.use(express.json());
+
+const ordersFile = './orders.json';
+
+// Initialize orders file if it doesn't exist
+if (!fs.existsSync(ordersFile)) {
+  fs.writeFileSync(ordersFile, JSON.stringify([]));
+}
+
+app.post('/confirm-order', (req, res) => {
+  const order = req.body;
+  order.timestamp = new Date().toISOString();
+  order.pickupCode = 'PU' + Math.floor(Math.random() * 1000000);
+
+  const existing = JSON.parse(fs.readFileSync(ordersFile));
+  existing.push(order);
+  fs.writeFileSync(ordersFile, JSON.stringify(existing, null, 2));
+
+  res.json({ message: 'Order confirmed!', pickupCode: order.pickupCode });
+});
+
+app.get('/orders', (req, res) => {
+  const orders = JSON.parse(fs.readFileSync(ordersFile));
+  res.json(orders);
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+    fetchOrders();
+  </script>
+</body>
+</html>
