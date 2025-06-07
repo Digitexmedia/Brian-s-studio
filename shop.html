@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop – Brian's Studio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://img.freepik.com/free-photo/flat-view-colorful-paint-splashes_23-2148864940.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 20px;
+      background-color: transparent;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: 30px;
+      color: white;
+      font-style: oblique;
+    }
+    .shop-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .item {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid #ddd;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    .item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .item button {
+      margin-top: 10px;
+      padding: 10px;
+      background: #4b0082;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+    .item button:hover {
+      background: #6a0dad;
+    }
+    .cart {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px solid #ddd;
+      backdrop-filter: blur(5px);
+    }
+    .mpesa-form {
+      margin-top: 20px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .confirm-btn {
+      background: #25D366;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background0.3s ease;
+    }
+    .confirm-btn:hover {
+      background: #128C7E;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Brian's Studio Shop</h1>
+    <div class="shop-items" id="shopItems">
+      <!-- Sample Items -->
+
+      <div class="item" data-name="African Girl" data-price="2800">
+        <img src="https://files.catbox.moe/c85w91.jpeg" alt="Artwork 1">
+        <h3>African Girl</h3>
+        <p>Price: KES 2800</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Queen Glow" data-price="2500">
+        <img src="https://files.catbox.moe/1or88u.jpeg" alt="Artwork 2">
+        <h3>Queen Glow</h3>
+        <p>Price: KES 2500</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Sunset Beauty" data-price="3800">
+        <img src="https://files.catbox.moe/bpvvlr.jpeg" alt="Artwork 3">
+        <h3>Sunset Beauty</h3>
+        <p>Price: KES 3800</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Fine Horse" data-price="3500">
+        <img src="https://files.catbox.moe/nkuy9e.jpeg" alt="Artwork 4">
+        <h3>Fine Horse</h3>
+        <p>Price: KES 3500</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+
+      <div class="item" data-name="Sunset Glow" data-price="1500">
+        <img src="https://files.catbox.moe/5vb4vh.jpeg" alt="Artwork 5">
+        <h3>Sunset Glow</h3>
+        <p>Price: KES 1500</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Ocean Bliss" data-price="1800">
+        <img src="https://files.catbox.moe/mflb8c.jpeg" alt="Artwork 6">
+        <h3>Ocean Bliss</h3>
+        <p>Price: KES 1800</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Next Billionare" data-price="2800">
+        <img src="https://files.catbox.moe/roxe8t.jpeg" alt="Artwork 7">
+        <h3>Next Billionare</h3>
+        <p>Price: KES 2800</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Toon Me" data-price="1900">
+        <img src="https://files.catbox.moe/svvrn9.jpeg" alt="Artwork 8">
+        <h3>Toon Me</h3>
+        <p>Price: KES 1900</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Cat Girl" data-price="1000">
+        <img src="https://files.catbox.moe/ggohfm.jpeg" alt="Artwork 9">
+        <h3>Cat Girl</h3>
+        <p>Price: KES 1000</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Shadow One" data-price="1700">
+        <img src="https://files.catbox.moe/zf94mg.jpeg" alt="Artwork 10">
+        <h3>Shadow One</h3>
+        <p>Price: KES 1700</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="cart" id="cart">
+      <h2>Your Cart</h2>
+      <ul id="cartList"></ul>
+      <p><strong>Total:</strong> KES <span id="totalAmount">0</span></p>
+      <div class="mpesa-form">
+        <input type="text" id="mpesaNumber" placeholder="Enter your M-Pesa Number">
+        <input type="text" id="pickupLocation" placeholder="Enter Pickup Location">
+        <button class="confirm-btn" onclick="confirmOrder()">Confirm & Pay with M-Pesa</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cart = [];
+    const cartList = document.getElementById('cartList');
+    const totalAmount = document.getElementById('totalAmount');
+
+    function addToCart(button) {
+      const item = button.parentElement;
+      const name = item.dataset.name;
+      const price = parseInt(item.dataset.price);
+      cart.push({ name, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      cartList.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - KES ${item.price}`;
+        cartList.appendChild(li);
+        total += item.price;
+      });
+      totalAmount.innerText = total;
+    }
+
+    async function confirmOrder() {
+      const mpesaNumber = document.getElementById('mpesaNumber').value;
+      const pickupLocation = document.getElementById('pickupLocation').value;
+      if (!mpesaNumber || !pickupLocation || cart.length === 0) {
+        alert("Please fill all fields and add at least one item to the cart.");
+        return;
+      }
+
+      const orderData = {
+        mpesaNumber,
+        pickupLocation,
+        cart,
+        total: cart.reduce((sum, item) => sum + item.price, 0)
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/confirm-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        });
+
+        const result = await response.json();
+        alert(`Order confirmed! Your pickup code is: ${result.pickupCode}`);
+
+        cart.length = 0;
+        updateCart();
+        document.getElementById('mpesaNumber').value = '';
+        document.getElementById('pickupLocation').value = '';
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to confirm order. Please try again.');
+
+
+        // === server.js ===
+const express = require('express');
+const fs = require('fs');
+const cors = require('cors');
+const app = express();
+const PORT = 3000;
+
+app.use(cors());
+app.use(express.json());
+
+const ordersFile = './orders.json';
+
+// Initialize orders file if it doesn't exist
+if (!fs.existsSync(ordersFile)) {
+  fs.writeFileSync(ordersFile, JSON.stringify([]));
+}
+
+app.post('/confirm-order', (req, res) => {
+  const order = req.body;
+  order.timestamp = new Date().toISOString();
+  order.pickupCode = 'PU' + Math.floor(Math.random() * 1000000);
+
+  const existing = JSON.parse(fs.readFileSync(ordersFile));
+  existing.push(order);
+  fs.writeFileSync(ordersFile, JSON.stringify(existing, null, 2));
+
+  res.json({ message: 'Order confirmed!', pickupCode: order.pickupCode });
+});
+
+app.get('/orders', (req, res) => {
+  const orders = JSON.parse(fs.readFileSync(ordersFile));
+  res.json(orders);
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+
+      }
+    }
+  
+    
+  </script>
+</body>
+</html>
